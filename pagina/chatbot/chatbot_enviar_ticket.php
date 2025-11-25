@@ -4,7 +4,8 @@ header('Content-Type: application/json; charset=utf-8');
 // === CONFIGURACIÓN DE JIRA ===
 $dominioJira = "https://yordiuriel9-1762829966794.atlassian.net"; 
 $emailJira   = "yordiuriel9@gmail.com"; 
-$apiToken    = "ATATT3xFfGF0sfI2jyeM2H32xZMujIPQ58osv4pXgRbyH37uRC96LJWh0DPCntFv9BPE5Y1_hA0Qch1gYZpeGJvUwmfjwFVgsOa-QEcl2wTy378B8QpNWZPXEIC9w2A-dHa-3y_pt86Xa9Iw23405TgLWgIq8VQBp_vQTt1UKquNdbHex_l12l8=8697CA6D"; // genera uno nuevo en https://id.atlassian.com/manage-profile/security/api-tokens
+$apiToken = "TOKEN_ELIMINADO_PARA_GITHUB";
+// genera uno nuevo en https://id.atlassian.com/manage-profile/security/api-tokens
 $projectKey  = "SCR"; // revisa la clave exacta de tu proyecto Jira
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
