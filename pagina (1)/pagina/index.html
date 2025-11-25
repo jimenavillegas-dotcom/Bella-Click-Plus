@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Online</title>
+    <link rel="stylesheet" href="chatbot/chatbot.css">
+    <style>
+        /* === Estilos originales de tu tienda === */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #f30049;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header img {
+            height: 50px;
+        }
+
+        .header .search-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-bar button {
+            padding: 10px 15px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .nav {
+            background-color: #000000;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: rgb(236, 232, 232);
+            font-weight: bold;
+        }
+
+        .banner {
+            background-image: url('../imagenes/imagen3.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgb(90, 5, 5);
+            font-size: 90px;
+            font-weight: bold;
+        }
+
+        .categories {
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .categories h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .categories-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .category-item {
+            display: block;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 180px;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.2s;
+        }
+
+        .category-item:hover {
+            transform: scale(1.05);
+        }
+
+        .category-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .category-item p {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabecera -->
+    <div class="header">
+        <img src="C:\Users\Lap1\Documents\Proyecto\imagenes\imagen3.jpg" alt="Logo de la Tienda">
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar productos...">
+            <button>Buscar</button>
+        </div>
+    </div>
+
+    <div class="nav">
+        <a href="C:\Users\Lap1\Documents\Proyecto\pagina\barra\categoria.html">Categorías</a>
+        <a href="C:\Users\Lap1\Documents\Proyecto\pagina\barra\ayuda.html">Ayuda</a>
+        <a href="C:\Users\Lap1\Documents\Proyecto\pagina\barra\cuenta.html">Cuenta</a>
+    </div>
+
+    <!-- Banner principal -->
+    <div class="banner"></div>
+
+    <!-- Sección de productos -->
+    <div class="categories">
+        <h2>Categorías</h2>
+        <div class="categories-grid">
+            <a href="autos.html" class="category-item">
+                <img src="C:\Users\Lap1\Documents\Proyecto\imagenes\auto.jpg" alt="Autos, Motos y Otros">
+                <p>Autos, Motos y Otros</p>
+            </a>
+            <a href="celulares.html" class="category-item">
+                <img src="C:\Users\Lap1\Documents\Proyecto\imagenes\celular.jpg" alt="Celulares y Telefonía">
+                <p>Celulares y Telefonía</p>
+            </a>
+            <a href="electrodomesticos.html" class="category-item">
+                <img src="C:\Users\Lap1\Documents\Proyecto\imagenes\electrodomesticos.jpg" alt="Electrodomésticos">
+                <p>Electrodomésticos</p>
+            </a>
+            <a href="herramientas.html" class="category-item">
+                <img src="C:\Users\Lap1\Documents\Proyecto\imagenes\herramienta.png" alt="Herramientas">
+                <p>Herramientas</p>
+            </a>
+            <a href="ropa.html" class="category-item">
+                <img src="C:\Users\Lap1\Documents\Proyecto\imagenes\ropa.jpg" alt="Ropa, Bolsas y Calzado">
+                <p>Ropa, Bolsas y Calzado</p>
+            </a>
+            <a href="deportes.html" class="category-item">
+                <img src="C:\Users\Lap1\Documents\Proyecto\imagenes\deporte.png" alt="Deportes y Fitness">
+                <p>Deportes y Fitness</p>
+            </a>
+            <a href="computacion.html" class="category-item">
+                <img src="C:\Users\Lap1\Documents\Proyecto\imagenes\computacion.jpg" alt="Computación">
+                <p>Computación</p>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Pie de página -->
+    <div class="footer">
+        <p>&copy; 2024 Tienda Online.</p>
+    </div>
+
+    <!-- === CHATBOT FLOTANTE === -->
+    <div id="chat-bubble" onclick="toggleChat()">💬</div>
+
+    <div id="chat-container">
+        <div id="chat-header">🤖 Asistente Virtual</div>
+        <div id="chat-body">
+            <div class="msg bot">
+                ¡Hola! 👋 Soy tu asistente virtual.<br>
+                Puedo ayudarte a buscar productos, ver precios o revisar tu carrito 🛒.
+            </div>
+        </div>
+        <div id="chat-input">
+            <input type="text" id="mensaje" placeholder="Escribe tu mensaje..." 
+                   onkeypress="if(event.key==='Enter'){enviarMensaje()}">
+            <button onclick="enviarMensaje()">Enviar</button>
+        </div>
+    </div>
+
+    <script src="chatbot/chatbot.js"></script>
+</body>
+</html>
+

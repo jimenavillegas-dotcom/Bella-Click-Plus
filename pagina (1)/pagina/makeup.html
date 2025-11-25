@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💄 Asistente de Maquillaje Inteligente</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #ffe4ec, #fff5f8);
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      color: #b83b5e;
+      margin-bottom: 0;
+    }
+    p.instruccion {
+      color: #555;
+      font-size: 1.1em;
+      margin-bottom: 20px;
+    }
+
+    video, canvas, img {
+      border-radius: 15px;
+      margin-top: 15px;
+      max-width: 90%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: 0.3s;
+    }
+
+    #panelBotones {
+      margin: 15px;
+    }
+
+    button {
+      background-color: #b83b5e;
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 8px;
+      margin: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 1em;
+    }
+    button:hover {
+      background-color: #a12e52;
+    }
+
+    input[type="file"] {
+      margin-top: 10px;
+    }
+
+    #resultado {
+      margin-top: 30px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      display: inline-block;
+      min-width: 280px;
+      animation: aparecer 0.8s ease;
+    }
+
+    @keyframes aparecer {
+      from {opacity: 0; transform: scale(0.9);}
+      to {opacity: 1; transform: scale(1);}
+    }
+
+    .colorBox {
+      width: 70px; height: 70px; margin: auto;
+      border-radius: 50%; border: 2px solid #444;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    }
+
+    #paso {
+      background: #fff0f3;
+      border-left: 5px solid #b83b5e;
+      padding: 10px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    #guardar {
+      background-color: #ffb6c1;
+      color: #333;
+    }
+    #guardar:hover {
+      background-color: #ff9cb0;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>💋 Asistente de Maquillaje Inteligente</h1>
+  <div id="paso">Paso 1️⃣: Activa tu cámara o sube una foto.</div>
+  <p class="instruccion">Analizaremos tu tipo de piel y te recomendaremos los mejores tonos para ti.</p>
+
+  <div id="panelBotones">
+    <button id="activarCam">📷 Activar cámara</button>
+    <button id="capturarFoto">📸 Capturar</button>
+    <input type="file" id="subirFoto" accept="image/*">
+  </div>
+
+  <video id="video" width="400" height="300" autoplay></video>
+  <canvas id="canvas" width="400" height="300" style="display:none;"></canvas>
+  <img id="imagenSubida" style="display:none;" />
+
+  <div id="resultado"></div>
+
+  <button id="guardar" style="display:none;">💾 Guardar resultado</button>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const subirFoto = document.getElementById('subirFoto');
+    const imagenSubida = document.getElementById('imagenSubida');
+    const resultado = document.getElementById('resultado');
+    const paso = document.getElementById('paso');
+    const guardar = document.getElementById('guardar');
+
+    // 🎥 Activar cámara
+    document.getElementById('activarCam').onclick = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+        paso.textContent = "Paso 2️⃣: Captura una imagen para analizar.";
+      } catch (err) {
+        alert("⚠️ No se pudo acceder a la cámara. Sube una foto en su lugar.");
+      }
+    };
+
+    // 📸 Capturar imagen del video
+    document.getElementById('capturarFoto').onclick = () => {
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      analizarColor(canvas);
+    };
+
+    // 📂 Subir foto manualmente
+    subirFoto.onchange = (event) => {
+      const archivo = event.target.files[0];
+      if (archivo) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          imagenSubida.src = e.target.result;
+          imagenSubida.style.display = "block";
+          paso.textContent = "Analizando tu tono de piel... 💆‍♀️";
+          imagenSubida.onload = () => analizarColor(imagenSubida);
+        };
+        reader.readAsDataURL(archivo);
+      }
+    };
+
+    // 🎨 Analizar color promedio de piel
+    function analizarColor(elemento) {
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(elemento, 0, 0, canvas.width, canvas.height);
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imgData.data;
+      let r = 0, g = 0, b = 0, count = 0;
+
+      for (let i = 0; i < data.length; i += 60) {
+        r += data[i];
+        g += data[i + 1];
+        b += data[i + 2];
+        count++;
+      }
+
+      r = Math.round(r / count);
+      g = Math.round(g / count);
+      b = Math.round(b / count);
+
+      const colorHex = rgbToHex(r, g, b);
+      const tipoPiel = clasificarPiel(r, g, b);
+      const makeup = recomendarMakeup(tipoPiel);
+
+      resultado.innerHTML = `
+        <h3>✨ Resultado del análisis</h3>
+        <div class="colorBox" style="background:${colorHex}"></div>
+        <p><strong>Color promedio:</strong> ${colorHex}</p>
+        <p><strong>Tipo de piel:</strong> ${tipoPiel}</p>
+        <hr>
+        <h4>💄 Recomendaciones personalizadas:</h4>
+        <ul style="text-align:left;display:inline-block;">
+          ${makeup.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      `;
+
+      paso.textContent = "Análisis completo ✅ ¡Disfruta tus sugerencias!";
+      guardar.style.display = "inline-block";
+    }
+
+    // 🔹 Utilidades
+    function rgbToHex(r, g, b) {
+      return "#" + [r, g, b].map(x => x.toString(16).padStart(2, "0")).join("");
+    }
+
+    function clasificarPiel(r, g, b) {
+      const brillo = (r + g + b) / 3;
+      if (brillo < 90) return "Piel oscura";
+      if (brillo < 160) return "Piel media";
+      return "Piel clara";
+    }
+
+    function recomendarMakeup(tipo) {
+      switch (tipo) {
+        case "Piel clara":
+          return [
+            "Base: tonos beige o rosados suaves.",
+            "Sombra: tonos durazno o malva claro.",
+            "Rubor: rosa pálido o coral suave.",
+            "Labial: nude, rosado o melocotón.",
+            "Iluminador: champán o perlado."
+          ];
+        case "Piel media":
+          return [
+            "Base: tonos dorados o miel.",
+            "Sombra: tonos cobre o bronce.",
+            "Rubor: coral o terracota.",
+            "Labial: rojo cálido o coral.",
+            "Iluminador: dorado cálido."
+          ];
+        case "Piel oscura":
+          return [
+            "Base: tonos bronce, espresso o cacao.",
+            "Sombra: dorada, vino o berenjena.",
+            "Rubor: fucsia, ciruela o ladrillo.",
+            "Labial: vino tinto o marrón intenso.",
+            "Iluminador: bronce o cobre metálico."
+          ];
+        default:
+          return ["No se pudo determinar el tipo de piel."];
+      }
+    }
+
+    // 💾 Guardar resultado
+    guardar.onclick = () => {
+      const blob = new Blob([resultado.innerText], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = "recomendacion_maquillaje.txt";
+      link.click();
+    };
+  </script>
+  <a href="index.php" class="back-button">Regresar a Inicio</a>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vender Producto</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        min-height: 100vh;
+        padding-bottom: 50px;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    /* Decoración de fondo */
+    body::before {
+        content: '';
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,182,193,0.1) 2px, transparent 2px);
+        background-size: 50px 50px;
+        animation: moveBackground 20s linear infinite;
+        z-index: 0;
+    }
+
+    @keyframes moveBackground {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(50px, 50px); }
+    }
+
+    /* Cabecera */
+    .header {
+        background: linear-gradient(135deg, #ff6f91 0%, #ff9a9e 50%, #ffc3a0 100%);
+        padding: 30px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 10px 40px rgba(255, 111, 145, 0.4);
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 300%;
+        height: 300%;
+        background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+        animation: headerPulse 10s ease-in-out infinite;
+    }
+
+    @keyframes headerPulse {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(20px, 20px) scale(1.1); }
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+    }
+
+    .header img {
+        height: 80px;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        border: 4px solid white;
+        transition: transform 0.3s ease;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .header img:hover {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .header-title {
+        color: white;
+        font-size: 2.2em;
+        font-weight: 700;
+        margin-top: 15px;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+        letter-spacing: 1px;
+    }
+
+    /* Contenedor del formulario */
+    .form-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 25px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
+        animation: slideUp 0.6s ease-out;
+        border: 3px solid rgba(255, 111, 145, 0.3);
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-container::before {
+        content: '✨';
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 3em;
+        animation: sparkle 2s ease-in-out infinite;
+    }
+
+    @keyframes sparkle {
+        0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+        50% { opacity: 0.5; transform: translateX(-50%) scale(1.2); }
+    }
+
+    .form-container h2 {
+        text-align: center;
+        background: linear-gradient(135deg, #ff6f91 0%, #ff9a9e 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 35px;
+        font-size: 2em;
+        font-weight: 700;
+        position: relative;
+    }
+
+    .form-icon {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-icon i {
+        font-size: 3em;
+        color: #ff6f91;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    .form-container label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 10px;
+        color: #555;
+        font-size: 0.95em;
+        transition: color 0.3s ease;
+    }
+
+    .form-container label i {
+        margin-right: 8px;
+        color: #ff6f91;
+    }
+
+    .form-container input,
+    .form-container textarea,
+    .form-container select {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 15px;
+        font-size: 1em;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.3s ease;
+        background: #fafafa;
+    }
+
+    .form-container input:focus,
+    .form-container textarea:focus,
+    .form-container select:focus {
+        outline: none;
+        border-color: #ff6f91;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(255, 111, 145, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .form-container textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .form-container input[type="file"] {
+        padding: 12px;
+        cursor: pointer;
+        background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
+        border: 2px dashed #ff6f91;
+    }
+
+    .form-container input[type="file"]:hover {
+        border-color: #ff9a9e;
+        background: linear-gradient(135deg, #ffe8ec 0%, #ffd4d9 100%);
+    }
+
+    .form-container button {
+        margin-top: 30px;
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #ff6f91 0%, #ff9a9e 100%);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 1.2em;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 25px rgba(255, 111, 145, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .form-container button::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .form-container button:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .form-container button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(255, 111, 145, 0.5);
+    }
+
+    .form-container button:active {
+        transform: translateY(-1px);
+    }
+
+    .form-container button i {
+        margin-right: 10px;
+    }
+
+    /* Select personalizado */
+    .form-container select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff6f91' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        background-size: 20px;
+        padding-right: 45px;
+    }
+
+    /* Botón de regreso */
+    .back-button {
+        display: block;
+        margin: 40px auto;
+        padding: 15px 35px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        border-radius: 25px;
+        width: fit-content;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        position: relative;
+        z-index: 1;
+    }
+
+    .back-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+    }
+
+    .back-button i {
+        margin-right: 10px;
+    }
+
+    /* Decoración flotante */
+    .floating-hearts {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .heart {
+        position: absolute;
+        font-size: 20px;
+        opacity: 0.3;
+        animation: floatHeart 15s infinite ease-in-out;
+    }
+
+    .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .heart:nth-child(2) { left: 20%; animation-delay: 2s; }
+    .heart:nth-child(3) { left: 30%; animation-delay: 4s; }
+    .heart:nth-child(4) { left: 40%; animation-delay: 6s; }
+    .heart:nth-child(5) { left: 50%; animation-delay: 8s; }
+    .heart:nth-child(6) { left: 60%; animation-delay: 10s; }
+    .heart:nth-child(7) { left: 70%; animation-delay: 12s; }
+    .heart:nth-child(8) { left: 80%; animation-delay: 14s; }
+    .heart:nth-child(9) { left: 90%; animation-delay: 16s; }
+
+    @keyframes floatHeart {
+        0% {
+            transform: translateY(100vh) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 0.3;
+        }
+        90% {
+            opacity: 0.3;
+        }
+        100% {
+            transform: translateY(-100px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .form-container {
+            margin: 30px 20px;
+            padding: 30px 25px;
+        }
+
+        .header-title {
+            font-size: 1.5em;
+        }
+
+        .form-container h2 {
+            font-size: 1.5em;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Decoración de corazones flotantes -->
+    <div class="floating-hearts">
+        <div class="heart">💖</div>
+        <div class="heart">✨</div>
+        <div class="heart">💝</div>
+        <div class="heart">🌸</div>
+        <div class="heart">💕</div>
+        <div class="heart">⭐</div>
+        <div class="heart">💖</div>
+        <div class="heart">🎀</div>
+        <div class="heart">💝</div>
+    </div>
+
+    <!-- Cabecera -->
+    <div class="header">
+        <div class="header-content">
+            <img src="img/imagen3.jpg" alt="Logo de la Tienda">
+            <div class="header-title">✨ Tienda Mágica ✨</div>
+        </div>
+    </div>
+
+    <!-- Formulario para vender producto -->
+    <div class="form-container">
+        <div class="form-icon">
+            <i class="fas fa-gift"></i>
+        </div>
+        <h2>Agregar Nuevo Producto</h2>
+        <form action="guardar_producto.php" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="nombre_producto">
+                    <i class="fas fa-tag"></i> Nombre del Producto:
+                </label>
+                <input type="text" id="nombre_producto" name="nombre_producto" placeholder="Ej: Brillo labial rosa mágico" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">
+                    <i class="fas fa-align-left"></i> Descripción:
+                </label>
+                <textarea id="descripcion" name="descripcion" rows="4" placeholder="Describe tu producto maravilloso..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="precio">
+                    <i class="fas fa-dollar-sign"></i> Precio:
+                </label>
+                <input type="number" id="precio" name="precio" step="0.01" placeholder="0.00" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cantidad">
+                    <i class="fas fa-boxes"></i> Cantidad en Stock:
+                </label>
+                <input type="number" id="cantidad" name="cantidad" placeholder="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="imagen">
+                    <i class="fas fa-image"></i> Imagen del Producto:
+                </label>
+                <input type="file" id="imagen" name="imagen" accept="image/*" required>
+            </div>
+
+            <div class="form-group">
+                <label for="categoria">
+                    <i class="fas fa-list-ul"></i> Categoría:
+                </label>
+                <select id="categoria" name="categoria" required>
+                    <option value="1">💄 Brillos y colores mágicos para labios</option>
+                    <option value="2">🌸 Tonos suaves para mejillas sonrojadas</option>
+                    <option value="3">🎨 Paletas de ensueño y delineadores brillantes</option>
+                    <option value="4">💅 Colores vibrantes para uñas perfectas</option>
+                    <option value="5">👑 Kits completos para princesas</option>
+                    <option value="6">🪞 Brochas, espejos y organizadores</option>
+                    <option value="7">🧴 Productos suaves para la piel</option>
+                </select>
+            </div>
+
+            <button type="submit">
+                <i class="fas fa-plus-circle"></i> Agregar Producto
+            </button>
+        </form>
+    </div>
+
+    <!-- Botón regresar -->
+    <a href="index.php" class="back-button">
+        <i class="fas fa-arrow-left"></i> Regresar a Inicio
+    </a>
+</body>
+</html>
